@@ -45,5 +45,5 @@
 
 1. **Clone the Repository**  
    ```bash
-   git clone https://github.com/yourusername/bookxpert-employee-management.git
+   git clone https://github.com/RohanM0205/BookXpertEMS.git
    cd bookxpert-employee-management
