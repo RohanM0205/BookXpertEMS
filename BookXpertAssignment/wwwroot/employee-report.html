@@ -1,0 +1,104 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>Employee Report</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 20px;
+        }
+
+        h2 {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px;
+        }
+
+        th, td {
+            border: 1px solid #aaa;
+            padding: 8px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #f4f4f4;
+        }
+
+        .summary {
+            margin-top: 20px;
+            font-weight: bold;
+            text-align: right;
+        }
+
+        @media print {
+            button {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <h2>Employee Report</h2>
+    <table id="reportTable">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Designation</th>
+                <th>Salary</th>
+                <th>Gender</th>
+                <th>State</th>
+                <th>DOB</th>
+                <th>Age</th>
+            </tr>
+        </thead>
+        <tbody></tbody>
+    </table>
+
+    <div class="summary" id="totalSalary"></div>
+
+    <div style="text-align: center; margin-top: 30px;">
+        <button onclick="window.print()">🖨️ Print / Save as PDF</button>
+    </div>
+
+    <script>
+    const employees = JSON.parse(localStorage.getItem("employeeReportData") || "[]");
+
+    const tbody = document.querySelector("#reportTable tbody");
+    let total = 0;
+
+    employees.forEach(emp => {
+      const tr = document.createElement("tr");
+      tr.innerHTML = `
+        <td>${emp.name}</td>
+        <td>${emp.designation}</td>
+        <td>₹${emp.salary.toLocaleString()}</td>
+        <td>${emp.gender}</td>
+        <td>${emp.state}</td>
+        <td>${emp.dateOfBirth?.split("T")[0]}</td>
+        <td>${calculateAge(emp.dateOfBirth)}</td>
+      `;
+      tbody.appendChild(tr);
+      total += emp.salary;
+    });
+
+    document.getElementById("totalSalary").innerText = `Total Salary: ₹${total.toLocaleString()}`;
+
+    function calculateAge(dobStr) {
+      const dob = new Date(dobStr);
+      const today = new Date();
+      let age = today.getFullYear() - dob.getFullYear();
+      const m = today.getMonth() - dob.getMonth();
+      if (m < 0 || (m === 0 && today.getDate() < dob.getDate())) {
+        age--;
+      }
+      return age;
+    }
+    </script>
+</body>
+</html>
